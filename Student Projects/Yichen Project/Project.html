@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Animals </title>
+</head>
+
+<body>
+<p style="color:black; font-family: French Script MT; font-size:50px"> Animals 
+<h4> Bla bla </h4>
+I am going to create a website about animals. There will be different sections for different animal habitats, which will be filled with little animal icons. When you mouse over the animal, it will tell you a short section about the animal. When you click the animal, it will direct you to another page that is not made by me, and provides more detailed information.</p>
+
+<video autoplay loop width="70%" height="70%" style="display:block; margin:auto;">
+ 
+<source src="Javascript TermProject/Resources/Video/Ocean.mp4" type="video/mp4">
+  
+
+</video>
+
+
+<BR>
+
+
+<audio autoplay loop>
+  
+<source src="Javascript TermProject/Resources/Audio/background music.mp3" type="audio/mpeg">
+ 
+</audio>
+
+<BR>
+<BR>
+<BR>
+
+<div style="width: 100%; height: 100%; position: relative;">
+   <img id="image1" style="position: relative;" src="Images/Jungle.jpg" alt="Jungle" width=100% height=100%>
+<a href="https://www.google.com/">
+   <img id="image2" style="position: absolute; top: 50%; left: 50%;" src="Images/Savanna.jpg" alt="Puppies" width=10% height=10%>
+</a>
+
+</div>
+
+<div style="width: 100%; height: 100%; position: relative;">
+   <img id="image1" style="position: relative;" src="Images/Savanna.jpg" alt="Savanna" width=100% height=100%>
+<a href="https://www.google.com/">
+   <img id="image2" style="position: absolute; top: 50%; left: 50%;" src="Images/Savanna.jpg" alt="Puppies" width=10% height=10%>
+</a>
+</div>
+
+<div style="width: 100%; height: 100%; position: relative;">
+   <img id="image1" style="position: relative;" src="Images/Desert.jpg" alt="Desert" width=100% height=100%>
+<a href="https://www.google.com/">
+   <img id="image2" style="position: absolute; top: 50%; left: 50%;" src="Images/Savanna.jpg" alt="Puppies" width=10% height=10%>
+</a>
+</div>
+
+<div style="width: 100%; height: 100%; position: relative;">
+   <img id="image1" style="position: relative;" src="Images/Tundra.png" alt="Tundra" width=100% height=100%>
+<a href="https://www.google.com/">
+   <img id="image2" style="position: absolute; top: 50%; left: 50%;" src="Images/Savanna.jpg" alt="Puppies" width=10% height=10%>
+</a>
+</div>
+
+
+<img src="./Images/Cat.jpg" alt="Meow" width=50% height=50%>
+
+<canvas id="myCanvas" width="2750" height="400" style="border:3px green;">
+</canvas>
+<script>
+
+
+  var canvas = document.getElementById("myCanvas");
+  var myContext = canvas.getContext("2d");
+  myContext.fillStyle="white";
+  myContext.fillRect(0, 0, 1325, 500)
+  myContext.fillStyle = "red"; //House
+  myContext.beginPath();
+  myContext.moveTo(625, 350); 
+  myContext.lineTo(625, 270);
+  myContext.lineTo(675, 200);
+  myContext.lineTo(725, 270);
+  myContext.lineTo(725, 350);
+  myContext.lineTo(625, 350);
+  myContext.stroke();
+  myContext.fill();
+  myContext.fillStyle = "orange"; //tree
+  myContext.beginPath();
+  myContext.moveTo(400, 250);
+  myContext.lineTo(500, 270); //trunk
+  myContext.lineTo(500, 350);
+  myContext.lineTo(525, 350);
+  myContext.lineTo(525, 260);
+  myContext.lineTo(570, 245); //bit in right
+  myContext.lineTo(555, 242);
+  myContext.lineTo(600, 220); //right branch
+  myContext.lineTo(525, 240);
+  myContext.lineTo(510, 175); //mid branch
+  myContext.lineTo(500, 240);
+  myContext.lineTo(400, 250); //left branch
+  myContext.stroke();
+  myContext.fill();
+  myContext.fillStyle="yellow";
+  myContext.fillRect(0, 500, 1325, 1000)
+  myContext.fillStyle="blue";
+  myContext.fillRect(0, 1000, 1325, 1500)
+  myContext.fillStyle="brown";
+  myContext.fillRect(0, 1500, 1325, 2000)
+
+</script>
+
+</body>
+</html>
+
