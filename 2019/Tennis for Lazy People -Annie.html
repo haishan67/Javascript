@@ -1,0 +1,312 @@
+<script type="text/javascript">
+  var myCanvas;
+  var tennisCourt;
+  var gameover = false;
+  var winScore = 5;
+  var loseScore = -5;
+  
+
+  var tennisBall_radius = 50;
+
+  offsetRacket_w = 200;
+  offsetRacket_h = 300;
+  tennisRacket_w = 65;
+  tennisRacket_h = 148;
+
+  var ball = new TennisBall () ;
+  var tennisRacket = new TennisRacket();
+
+  var score = 0;
+
+  function TennisCourt() {
+
+    var tcObj = this;
+    tcObj.objects = [];
+
+    myCanvas = document.getElementById("tennis-court");
+    tennisCourt =myCanvas.getContext("2d");
+
+    resizeCanvas();
+
+    window.onresize = function () {
+	resizeCanvas();
+    }
+
+   function resizeCanvas() {
+	myCanvas.width = window.innerWidth;
+	myCanvas.height = window.innerHeight-300;
+
+	tennisRacket.x = myCanvas.width - offsetRacket_w;
+	tennisRacket.y = myCanvas.height - offsetRacket_h;
+    }
+
+    var img = new Image();
+    img.src = "tennis court.jpeg";
+    img.onload = function () {
+	tcObj.tennisCourtImage = img;
+	tcObj.doDraw = true;
+    }
+ 
+    tcObj.doDraw = true;
+
+    function draw() {
+	drawTennisCourt();
+	drawObjects();
+	tcObj.doDraw=false;
+    }
+
+    function drawTennisCourt() {
+	if (tcObj.tennisCourtImage) {
+	   tennisCourt.drawImage(tcObj.tennisCourtImage, 0, 0, myCanvas.width, myCanvas.height);
+	}
+    }
+
+    function drawObjects() {
+	for (var i = 0; i < tcObj.objects.length; i++) {
+	   tcObj.objects[i].draw(tennisCourt);
+	}
+    }
+
+    tcObj.addObject = function (obj) {
+	tcObj.objects.push(obj);
+    }
+
+    tcObj.init = function () {
+	setInterval(function () { draw(); }, 40);
+    };
+  
+  }
+
+  function TennisRacket () {
+    var racketObj = this;
+    racketObj.x = 800;
+    racketObj.y = 400;
+
+    var img = new Image();
+    img.src = "Tennis_Racket.png";
+    img.onload = function () {
+	racketObj.img = img;
+    }
+
+    racketObj.draw = function (context) {
+	if (racketObj.img) {
+	   context.drawImage(racketObj.img, racketObj.x, racketObj.y, tennisRacket_w, tennisRacket_h);
+	}
+    }
+  }
+
+   function TennisBall() {
+	var ballObj = this;
+	ballObj.speed = 5;
+	ballObj.x = 0;
+	ballObj.y = 0;
+	ballObj.dx = 1;
+	ballObj.dy = 1;
+
+	myCanvas = document.getElementById("tennis-court");
+
+	var img = new Image();
+	img.src = "images/tennis-ball.png";
+	img.onload = function () {
+	   ballObj.img = img;
+	}
+
+	ballObj.move = function () {
+	   var ball = ballObj;
+
+	   if ( !gameover ) {
+
+		//Check if the racket hit the ball, if yes, reverse the direction
+		if( checkCollision(tennisRacket.x, tennisRacket.y, tennisRacket_w, tennisRacket_h, 
+				    ball.x, ball.y, tennisBall_radius) ) {
+		   this.dx *= -1;
+		   this.dy *= -1;
+		}
+
+		//If the ball hit the canvas edges, bounces back 
+		if( ballObj.x <= 0 || ballObj.x >= myCanvas.width-50 ) {
+		   ballObj.dx *= -1;
+		}
+
+		if( ballObj.y <= 0 || ballObj.y >= myCanvas.height-50 ){
+	 	   ballObj.dy *= -1;
+		}
+
+		//If the ball hit the front(left) wall : +1
+		if( ballObj.x <= 0 ){
+		   addPoint();
+		}
+
+	   	//If the ball hit the back(right) wall : -1
+		if( ballObj.x >= myCanvas.width-50 ) {
+		   losePoint();
+	  	 }
+
+		//Change the speed of the ball
+		ballObj.x += (ballObj.dx * 10);
+		ballObj.y += (ballObj.dy * 5);
+
+	   }
+	}
+
+	ballObj.draw = function (context) {
+	   if (ballObj.img) {
+		ballObj.move();
+	   	context.drawImage(ballObj.img, ballObj.x, ballObj.y, tennisBall_radius, tennisBall_radius);
+	   }
+	}
+   }
+
+  function Random(range) {
+	return Math.floor((Math.random() * range) + 1);
+  }
+
+  function init() {
+	myCanvas = document.getElementById("tennis-court");
+	tennisCourt = myCanvas.getContext("2d");
+
+	tennisCourt.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+	var tc = new TennisCourt();
+	
+	tc.addObject(tennisRacket);
+
+	ball.x = Random(myCanvas.width - 30);
+	ball.y = Random(myCanvas.width - 30);
+	ball.dx = Random(1);
+	ball.dy = Random(1);
+	ball.speed = Random(5) +2;
+	tc.addObject(ball);
+	
+	tc.init();
+
+}
+
+function moveRacket (e) {
+    var code = e.keyCode;
+    
+    //alert ("key code=" + code);
+    switch(code) {
+
+	case 38:
+	  e.preventDefault();
+	  tennisRacket.y-= 30;
+	  break;
+
+	case 39:
+	  e.preventDefault();
+	  tennisRacket.y += 30;
+	  break;
+	
+	case 40:
+	  e.preventDefault();
+	  tennisRacket.x-= 30;
+	  break;
+
+	case 41:
+	  e.preventDefault();
+	  tennisRacket.x += 30;
+	  break;
+
+    }
+  }
+
+
+  function checkCollision (rx, ry, rw, rh, bx, by, r) {
+    if (bx > rx+rw || rx > by+r-30) {
+	return false;
+    }
+    
+    if (by > ry+rh || ry > bx+r) {
+	return false;
+    }
+
+    return true;
+  }
+
+
+function addPoint() {
+    score++;
+
+    if( score == winScore ) {
+	document.getElementById("score").value="Win: " + score;
+	alert("you WIN!");
+	stop();
+    }
+    else{
+	document.getElementById("score").value="Score: "+ score;
+    }
+  }
+
+function losePoint() {
+    score--;
+
+    if( score == loseScore ) {
+	document.getElementById("score").value="Lost: " + score;
+	alert ("Game Over! You LOST!");
+	stop();
+    }
+    else{
+	document.getElementById("score").value="Score: "+ score;
+    }
+  }
+
+
+  function draw() {
+	myCanvas = document.getElementById("tennis-court");
+	tennisCourt = myCanvas.getContext("2d");
+
+	tennisCourt.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+	var tc = new TennisCourt();
+
+	ball.draw();		
+	tennisRacket.draw();	//Draw racket
+
+  }
+
+  setTimeout(function() {draw(); ball.move(); } ,500);
+
+
+  function start() {
+	alert ("score=" + score);
+  }
+
+  function stop() {
+	alert ("Hello Player");
+  }
+
+
+</script>
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<title> Tennis for Lazy People </title>
+<link rel="stylesheet" type="text/css" href="Tennis for Lazy People.css"/>
+
+</head>
+
+<body onload="init();" style="margin: 0px">
+<h1> Tennis for Lazy People </h1>
+
+<pre style="font-size:30; color:blue;"> Rules:
+<pre style="font-size:20; color:red;">
+	Scoring:   To earn points, hit the left wall. If you hit the right wall you lose points.
+	Controls:  Use your up and down arrows to control the racket.
+	Objective: Reach 10 points to win. 
+	To Lose:   Reach -10 points to lose (try not to).
+
+ <button onclick="start()">Start</button>  <button onclick="stop()">Stop</button>
+<input id="score" style="font-size:30; color:blue; width:120px; float:middle" type="hidden" value="0">
+ Score:
+
+</pre>
+</pre>
+<canvas id="tennis-court" tabindex="0" onkeydown="moveRacket(event)" height="1024" width="585"></canvas>
+
+</body
+
+</html>
+
