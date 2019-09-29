@@ -41,7 +41,7 @@
     }
 
     var img = new Image();
-    img.src = "tennis court.jpeg";
+    img.src = "tennis court.png";
     img.onload = function () {
 	tcObj.tennisCourtImage = img;
 	tcObj.doDraw = true;
@@ -83,7 +83,7 @@
     racketObj.y = 400;
 
     var img = new Image();
-    img.src = "Tennis_Racket.png";
+    img.src = "tennis-racket.png";
     img.onload = function () {
 	racketObj.img = img;
     }
@@ -95,67 +95,63 @@
     }
   }
 
-   function TennisBall() {
-	var ballObj = this;
-	ballObj.speed = 5;
-	ballObj.x = 0;
-	ballObj.y = 0;
-	ballObj.dx = 1;
-	ballObj.dy = 1;
 
-	myCanvas = document.getElementById("tennis-court");
 
-	var img = new Image();
-	img.src = "images/tennis-ball.png";
-	img.onload = function () {
-	   ballObj.img = img;
+  function TennisBall () {
+    var ballObj = this;
+    ballObj.speed = 10;
+    ballObj.x = 0;
+    ballObj.y = 0;
+    ballObj.dx = 1;
+    ballObj.dy = 1;
+
+    myCanvas = document.getElementById ("tennis-court");
+
+    var img = new Image();
+    img.src = "tennis-ball.png";
+    img.onload = function () {
+	ballObj.img = img;
+    }
+
+    ballObj.move = function () {
+	var ball = ballObj;
+
+	if (!gameover) {
+	  
+	  if( checkCollision(tennisRacket.x, tennisRacket.y, tennisRacket_w, tennisRacket_h,
+			ball.x, ball.y, tennisBall_radius) ) {
+		this.dx *= -1;
+		this.dy *= -1;
 	}
 
-	ballObj.move = function () {
-	   var ball = ballObj;
-
-	   if ( !gameover ) {
-
-		//Check if the racket hit the ball, if yes, reverse the direction
-		if( checkCollision(tennisRacket.x, tennisRacket.y, tennisRacket_w, tennisRacket_h, 
-				    ball.x, ball.y, tennisBall_radius) ) {
-		   this.dx *= -1;
-		   this.dy *= -1;
-		}
-
-		//If the ball hit the canvas edges, bounces back 
-		if( ballObj.x <= 0 || ballObj.x >= myCanvas.width-50 ) {
-		   ballObj.dx *= -1;
-		}
-
-		if( ballObj.y <= 0 || ballObj.y >= myCanvas.height-50 ){
-	 	   ballObj.dy *= -1;
-		}
-
-		//If the ball hit the front(left) wall : +1
-		if( ballObj.x <= 0 ){
-		   addPoint();
-		}
-
-	   	//If the ball hit the back(right) wall : -1
-		if( ballObj.x >= myCanvas.width-50 ) {
-		   losePoint();
-	  	 }
-
-		//Change the speed of the ball
-		ballObj.x += (ballObj.dx * 10);
-		ballObj.y += (ballObj.dy * 5);
-
-	   }
+	if( ballObj.x <= 0 || ballObj.x >= myCanvas.width-50 ) {
+	   ballObj.dx *= -1;
 	}
-
-	ballObj.draw = function (context) {
-	   if (ballObj.img) {
-		ballObj.move();
-	   	context.drawImage(ballObj.img, ballObj.x, ballObj.y, tennisBall_radius, tennisBall_radius);
-	   }
+	
+	if( ballObj.y <= 0 || ballObj.y >= myCanvas.height-50 ) {
+	   ballObj.dy *= -1;
 	}
-   }
+	
+	if( ballObj.x <= 0 ) {
+	    //addPoint();
+        }
+
+	if( ballObj.x >= myCanvas.width-50) {
+	    //losePoint();
+	  }
+
+	ballObj.x +=(ballObj.dx * 10);
+	ballObj.y +=(ballObj.dy * 5);
+      }
+  }
+
+    ballObj.draw = function (context) {
+	if (ballObj.img) {
+	  ballObj.move();
+	  context.drawImage(ballObj.img, ballObj.x, ballObj.y, tennisBall_radius, tennisBall_radius);
+	}
+    }
+  }
 
   function Random(range) {
 	return Math.floor((Math.random() * range) + 1);
@@ -179,13 +175,14 @@
 	tc.addObject(ball);
 	
 	tc.init();
+	myCanvas.focus();
 
 }
 
 function moveRacket (e) {
     var code = e.keyCode;
     
-    //alert ("key code=" + code);
+   //alert ("key code=" + code);
     switch(code) {
 
 	case 38:
@@ -193,17 +190,17 @@ function moveRacket (e) {
 	  tennisRacket.y-= 30;
 	  break;
 
-	case 39:
+	case 40:
 	  e.preventDefault();
 	  tennisRacket.y += 30;
 	  break;
 	
-	case 40:
+	case 37:
 	  e.preventDefault();
 	  tennisRacket.x-= 30;
 	  break;
 
-	case 41:
+	case 39:
 	  e.preventDefault();
 	  tennisRacket.x += 30;
 	  break;
@@ -213,11 +210,11 @@ function moveRacket (e) {
 
 
   function checkCollision (rx, ry, rw, rh, bx, by, r) {
-    if (bx > rx+rw || rx > by+r-30) {
+    if (bx > rx+rw || rx > bx+r-30) {
 	return false;
     }
     
-    if (by > ry+rh || ry > bx+r) {
+    if (by > ry+rh || ry > by+r) {
 	return false;
     }
 
@@ -269,12 +266,21 @@ function losePoint() {
 
 
   function start() {
-	alert ("score=" + score);
+	gameover = false;
+	score = 0;
+	document.getElementById("score").value = "Score: "+ score;
+
+	draw();
+	ball.move();
+
   }
 
   function stop() {
-	alert ("Hello Player");
+	gamover = true;
+
   }
+
+  
 
 
 </script>
@@ -289,24 +295,23 @@ function losePoint() {
 </head>
 
 <body onload="init();" style="margin: 0px">
-<h1> Tennis for Lazy People </h1>
+<center><pre style="font-family:cursive; font-size:50;"> Tennis for Lazy People </pre></center>
 
-<pre style="font-size:30; color:blue;"> Rules:
-<pre style="font-size:20; color:red;">
+<pre style="font-family:cursive; font-size:30; color:blue;">   RULES:</pre>
+<pre style="font-family:cursive; font-size:20; color:red;">
 	Scoring:   To earn points, hit the left wall. If you hit the right wall you lose points.
 	Controls:  Use your up and down arrows to control the racket.
 	Objective: Reach 10 points to win. 
 	To Lose:   Reach -10 points to lose (try not to).
 
- <button onclick="start()">Start</button>  <button onclick="stop()">Stop</button>
-<input id="score" style="font-size:30; color:blue; width:120px; float:middle" type="hidden" value="0">
- Score:
+ <button onclick="start()">Start</button>  <button onclick="stop()">Stop</button> 	Score:<input id="score" style="font-size:30; color:blue; width:120px; float:middle" type="text" value="0">
+ 
+</pre>
 
-</pre>
-</pre>
+
 <canvas id="tennis-court" tabindex="0" onkeydown="moveRacket(event)" height="1024" width="585"></canvas>
 
-</body
+</body>
 
 </html>
 
