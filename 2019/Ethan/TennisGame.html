@@ -1,0 +1,331 @@
+<script type="text/javascript">
+var myCanvas;
+var tennisCourt;
+var gameover = false;
+var score = 0;
+var winScore = 10;
+var loseScore = -10;
+
+var tennisBall_radius = 50;
+
+offsetRacket_w = 200;
+offsetRacket_h = 300;
+tennisRacket_w = 65;
+tennisRacket_h = 148;
+
+var ball = new TennisBall();
+var tennisRacket = new TennisRacket();
+
+function TennisCourt() {
+
+ var tcObj = this;
+ tcObj.objects = [];
+
+ myCanvas = document.getElementById("tennis-court");
+ tennisCourt = myCanvas.getContext("2d");
+
+ resizeCanvas();
+ 
+ window.onresize = function () {
+ 	resizeCanvas();
+ }
+ 
+ function resizeCanvas() {
+ 	myCanvas.width = window.innerWidth;
+ 	myCanvas.height = window.innerHeight-300;
+
+ 	tennisRacket.x = myCanvas.width - offsetRacket_w;
+ 	tennisRacket.y = myCanvas.height - offsetRacket_h;
+ } 
+
+ var img = new Image();
+ img.src = "Pictures/tenniscourt.jpg";
+ img.onload = function() {
+  	tcObj.tennisCourtImage = img;
+  	tcObj.doDraw = true;
+ }
+
+ tcObj.doDraw = true;
+
+ function draw() {
+ 	drawTennisCourt();
+ 	drawObjects();
+ 	tcObj.doDraw = false;
+ }
+
+ function drawTennisCourt() {
+ 	if(tcObj.tennisCourtImage) {
+  		tennisCourt.drawImage(tcObj.tennisCourtImage, 0, 0, myCanvas.width, myCanvas.height);
+ 	}
+ }
+
+ function drawObjects() {
+ 	for(var i = 0; i < tcObj.objects.length; i++) {
+  		tcObj.objects[i].draw(tennisCourt);
+ 	}
+ }
+
+ tcObj.addObject = function(obj) {
+ 	tcObj.objects.push(obj);
+ }
+
+ tcObj.init = function() {
+ 	setInterval(function() {draw();}, 40);
+ };
+}
+
+function TennisRacket () {
+	var racketObj = this;
+	racketObj.x = 700;
+	racketObj.y = 175;
+
+	var img = new Image();
+	img.src = "Pictures/png r.png";
+	img.onload = function () {
+		racketObj.img = img;
+	}
+
+	racketObj.draw = function (context) {
+		if (racketObj.img) {
+			context.drawImage(racketObj.img, racketObj.x, racketObj.y, tennisRacket_w, tennisRacket_h);
+		}
+	}
+}
+
+function Random(range) {
+	return Math.floor((Math.random() * range) + 1);
+}
+
+
+ function moveRacket(e) {
+ 	var code= e.keyCode;
+
+	//alert("The Key Code for the Button you just pressed is: " + code + ".");
+	
+
+ 	switch(code) {
+		
+		//case 37:
+			//e.preventDefault();
+			//tennisRacket.x -= 15;
+			//break;
+		
+ 		case 38:
+ 			e.preventDefault();
+			tennisRacket.y -= 15;
+ 			break;
+
+		//case 39: 
+			//e.preventDefault();
+			//tennisRacket.x += 15;
+			//break;
+
+		case 40:
+			e.preventDefault();
+			tennisRacket.y += 15;
+			break;
+	}
+ }
+
+
+function TennisBall() {
+	var ballObj = this;
+	ballObj.speed = 5;
+	ballObj.x = 0;
+	ballObj.y = 0;
+	ballObj.dx = 1;
+	ballObj.dy = 1;
+
+	myCanvas = document.getElementById("tennis-court");
+	
+	var img = new Image();
+	img.src = "Pictures/tennisball.png";
+	img.onload = function () {
+		ballObj.img = img;
+	}
+
+	ballObj.move = function () {
+		var ball = ballObj;
+	
+		
+		if ( !gameover ) {
+			
+			if ( checkCollision(tennisRacket.x, tennisRacket.y, tennisRacket_w, tennisRacket_h, 
+					ball.x, ball.y, tennisBall_radius) ) {
+				this.dx *= -1;
+				this.dy *= -1;
+			}
+
+		
+		if( ballObj.x <= 0 || ballObj.x >= myCanvas.width-50) {
+			ballObj.dx *= -1;
+		}
+
+		if( ballObj.y <=0 || ballObj.y >= myCanvas.height-50) {
+			ballObj.dy *= -1;
+		}
+
+		if( ballObj.x <= 0 ) {
+			addPoint();
+		}
+
+		if( ballObj.x >= myCanvas.width-50 ) {
+			losePoint();
+		}
+		
+
+		
+		ballObj.x += (ballObj.dx * 25);
+		ballObj.y += (ballObj.dy * 15);
+		}
+	}
+	
+	ballObj.draw = function (context) {
+		if (ballObj.img) {
+			ballObj.move();
+			context.drawImage(ballObj.img, ballObj.x, ballObj.y, tennisBall_radius, tennisBall_radius);
+		}
+	}
+}
+
+function Random(range) {
+	return Math.floor((Math.random() * range) + 1);
+}
+
+
+function init() {
+ myCanvas = document.getElementById("tennis-court");
+ tennisCourt = myCanvas.getContext("2d");
+
+ tennisCourt.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+ var tc = new TennisCourt();
+
+ tc.addObject(tennisRacket);
+
+ ball.x = Random(myCanvas.width - 30);
+ ball.y = Random(myCanvas.height - 30);
+ ball.dx = Random(1);
+ ball.dy = Random(1);
+ ball.speed = Random(5)+2;
+ tc.addObject(ball);
+
+ tc.init();
+ myCanvas.focus();
+
+}
+
+ function checkCollision (rx, ry, rw, rh, bx, by, r) {
+ 	if (bx > rx+rw || rx > bx+r-45) {
+		return false;
+	}
+
+	if (by > ry+rh || ry > by+r-20) {
+		return false;
+	}
+	
+	return true;
+	
+ }
+
+function draw() {
+ myCanvas = document.getElementById("tennis-court");
+ tennisCourt = myCanvas.getContext("2d");
+
+ tennisCourt.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+ var tc = new TennisCourt();
+
+ ball.draw();
+}
+
+function addPoint() {
+ score++;
+
+ 	if( score == winScore ) {
+		//document.getElementById("score").value="WIN";
+		alert("You Won!");
+		stop();
+		
+	}
+	else {
+           document.getElementById("score").value="Score: "+ score;
+	}
+}
+
+function losePoint() {
+ score--;
+
+ 	if( score == loseScore ) {
+		//document.getElementById("score").value="LOST";
+		alert("You Lost!");
+		stop();
+	}
+	else {
+	   document.getElementById("score").value="Score: "+ score;
+	}
+}
+
+
+
+
+
+
+
+function start() {
+ alert("Starting Game...");
+ gameover = false;
+ score = 0;
+ document.getElementById("score").value = "Score: " + score;
+
+ draw();
+ ball.move();
+}
+
+
+
+function stop() {
+ alert("Stopping Game...");
+ gameover = true;
+ document.getElementById("score").value="GAME STOPPED.";
+}
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>EPIC Tennis Game!</title>
+<link rel="stylesheet" type="text/css" href="Tennis.css" />
+</head>
+<body onLoad="init()" style="background-color:yellowgreen;">
+<p style="color:black; font-family: serif; font-size:20px"> EPIC Tennis Game! </p>
+<p style="color:blue; font-family: serif; font-size:15px"> Directions: </p>
+<p style="color:red; font-family: serif; font-size:15px"> - If the ball hits the left wall, you SCORE a point, but if the ball hits the right wall, you LOSE a point.
+<br>- Use the arrow keys to move your racket up and down. </p>
+<p style="color:purple; font-family: serif; font-size:15px"> You WIN when your score is 10 and you LOSE when your score is -10. </p>
+<input id="score" style="font-size:30; color:brown; width:250px; float:middle" type="button" value="Score: 0"> 
+<br><br>
+<p style="color:black; font-family: serif; font-size:10px">Press here to Play again!  &nbsp; Press here to Stop!</p>
+<button onClick="start()" type="button">Play!</button>
+<button onClick="stop()" type="button">Stop</button>
+<br><br>
+<canvas id="tennis-court" tabindex="0 " onkeydown="moveRacket(event)" height="364.8" width="273.6"></canvas>
+</body>
+</html>
+
