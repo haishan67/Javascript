@@ -133,11 +133,11 @@
 	}
 	
 	if( ballObj.x <= 0 ) {
-	    //addPoint();
+	    addPoint();
         }
 
 	if( ballObj.x >= myCanvas.width-50) {
-	    //losePoint();
+	    losePoint();
 	  }
 
 	ballObj.x +=(ballObj.dx * 10);
@@ -168,7 +168,7 @@
 	tc.addObject(tennisRacket);
 
 	ball.x = Random(myCanvas.width - 30);
-	ball.y = Random(myCanvas.width - 30);
+	ball.y = Random(myCanvas.height - 30);
 	ball.dx = Random(1);
 	ball.dy = Random(1);
 	ball.speed = Random(5) +2;
@@ -257,8 +257,8 @@ function losePoint() {
 
 	var tc = new TennisCourt();
 
-	ball.draw();		
-	tennisRacket.draw();	//Draw racket
+	ball.draw(tennisCourt);		
+	tennisRacket.draw(tennisCourt);	//Draw racket
 
   }
 
@@ -276,7 +276,7 @@ function losePoint() {
   }
 
   function stop() {
-	gamover = true;
+	gameover = true;
 
   }
 
@@ -304,10 +304,9 @@ function losePoint() {
 	Objective: Reach 10 points to win. 
 	To Lose:   Reach -10 points to lose (try not to).
 
- <button onclick="start()">Start</button>  <button onclick="stop()">Stop</button> 	Score:<input id="score" style="font-size:30; color:blue; width:120px; float:middle" type="text" value="0">
+ <button onclick="start()">Start</button>  <button onclick="stop()">Stop</button> 	Score:<input id="score" style="font-size:30; color:blue; width:120px; float:middle" type="text" value="Score: 0">
  
 </pre>
-
 
 <canvas id="tennis-court" tabindex="0" onkeydown="moveRacket(event)" height="1024" width="585"></canvas>
 
