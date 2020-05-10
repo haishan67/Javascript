@@ -1,0 +1,9 @@
+/*
+  Style Sheet for my Minecraft
+*/
+
+.rotated-image 
+{
+ -webkit-transform: rotate(45deg);
+ transform: rotate(45deg);
+}

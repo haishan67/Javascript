@@ -1,0 +1,31 @@
+/*
+  Style Sheet for my Minecraft
+*/
+
+#container{
+width:250px;
+height:250px;
+position:relative;
+}
+
+#c3{
+width:100%;
+height:100%;
+top:10px;
+left:100px;
+position:absolute;
+}
+
+#c2{
+width:85%;
+height:85%;
+top:180px;
+left:190px;
+position:absolute;
+}
+
+#c1{
+top: 150px;
+left: 30px;
+position:absolute;
+}
