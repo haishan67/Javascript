@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>term project</title>
+
+ <link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Shade|Covered+By+Your+Grace" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:800" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+<style>
+.text-info{
+  height: 200px;
+  width: 200px;
+  border: 1px solid black;
+  display: flex;
+  align-items: left;
+  justify-content: center;
+}
+
+.hobbies{
+  height: 100px;
+  width: 100px;
+  border: 1px solid black;
+}
+.hobbies:hover{
+  background-color: lightblue
+}
+.interests{
+  height: 100px;
+  width: 100px;
+  border: 1px solid black;
+}
+.interests:hover{
+  background-color: orange
+}
+
+#hobbies, #interests{
+  display: none;
+}
+.interests:hover ~ .text-info #interests {
+  display: block;
+  background-color: orange;
+}
+.hobbies:hover ~ .text-info #hobbies {
+  display: block;
+  background-color: lightblue;
+}
+}
+</style>
+<style>
+body {
+  background-image: url('kirbo.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+</style>
+<style>
+
+</style>
+<script>
+function startTime() {
+  var today = new Date();
+  var h = today.getHours();
+  var m = today.getMinutes();
+  var s = today.getSeconds();
+  m = checkTime(m);
+  s = checkTime(s);
+  document.getElementById('txt').innerHTML =
+  h + ":" + m + ":" + s;
+  var t = setTimeout(startTime, 500);
+}
+function checkTime(i) {
+  if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+  return i;
+}
+</script>
+</head>
+
+<body style="background-color:black;">
+
+<body>
+<h1 id="head1">welcome to my website!</h1>
+<h3>My name is Allen.</h3>
+<p style="color:black; font-family: Helvetica; font-size: 25px">A clock ↓
+</p>
+
+<body onload="startTime()">
+<div id="txt"></div>
+</body>
+
+<style>
+#txt{
+font-size: 90px;
+font-family: 'Bungee';
+color: white;
+}
+</style>
+
+<br>
+
+<div class="hobbies" id="f"><p>Some hobbies of mine</p></div>
+<div class="interests" id="g"><p>Some interests</p></div>
+<div class="text-info">
+  <p id="hobbies">Some hobbies of mine are piano, tennis, gaming, reading, and chess. I play 
+clarinet in my school band, and do mathcounts.</p>
+  <p id="interests">So far, I don't know what I want to do in the future. I do want to do something
+ technology-related. I'm interested in programming and math.</p>
+</div>
+<style>
+#f{
+background-color: lightblue
+}
+#g{
+background-color: orange
+}
+</style>
+
+<pre>
+<span style="background-color:#FFFFFF">
+I couldn't think of any other ideas for a website, so take some random info :/
+Some websites I use are <a href="https://www.youtube.com" target="_blank">youtube</a> and <a href="https://reddit.com" target="_blank">reddit.</a>
+As this was written, I am a 6th grader at Creekside Middle School on team barracuda.
+I compete in Mathcounts and am hoping to make it to the national competition.
+I like to draw in FireAlpaca. 
+I don't play that many games, but I do watch a lot of youtube.(I watch more youtube than I play games.)
+Book series that I read are the Camp-half Blood series, Harry Potter, Warriors, and Wings of Fire. I've reread all of these multiple times haha
+My favorite color is either <span style="background-color:blue">blue</span> or <span style="background-color:#000">black</span>.
+I have a SISTER(a younger one, no less)
+</span>
+</pre>
+
+
+<img src='heyhey.jpg' alt = chicken looking at you>
+<br>
+<div style="background:#787468;border:2px solid #000000;border-radius:10px; margin-bottom: 1x; margin-side: 10px;">
+<dl><dd><span><p style="color:black; font-family: calibri; font-size:20px">Hello</p></span> </dd><dd> </dd></dl></div>-->
+
+</div>
+<br>
+
+<style>
+#head1:hover{
+font-size: 100px;
+background-color: lightgreen
+}
+</style>
+
+<select name="dpt" onChange="picture.src=this.options[this.selectedIndex].getAttribute('data-whichPicture');" >
+<option value="1" data-whichPicture='' >Select the dropdown menu for pictures!</option>
+<option value="2" data-whichPicture='baseboi2.jpg' >I like chickens</option>
+<option value="3" data-whichPicture='peppers.jpg' >I also like spicy things...</option>
+<option value="4" data-whichPicture='buffalosauce.jpg' >...such as buffalo sauce...</option>
+<option value="5" data-whichPicture='xxtrahotcheetos.jpg' >...and flamin' hot cheetos!</option>
+<option value="6" data-whichPicture='yeetisis.png' >Here's another gif</option>
+</select>
+</select>
+<img src='arrow.png' id='picture' />
+
+
+
+</body>
+</html>
